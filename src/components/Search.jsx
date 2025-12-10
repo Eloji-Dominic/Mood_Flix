@@ -1,5 +1,4 @@
-import React from "react";
-import SearchIcon from "../assets/search.svg";
+import SearchIcon from "/search.svg";
 
 const Search = ({ searchTerm, setSearchTerm }) => {
   return (
