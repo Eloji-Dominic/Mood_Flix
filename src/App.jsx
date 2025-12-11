@@ -102,14 +102,16 @@ const App = () => {
           <section>
             <h2>Trending Movies</h2>
 
-            <ul>
-              {trendingMovies.map((movie, index) => {
-                <li key={movie.$id}>
-                  <p>{index + 1}</p>
-                  <img src={movie.poster_url} alt={movie.title} />
-                </li>
-              })}
-            </ul>
+              <ul className="trending-movies">
+                {trendingMovies.map((movie, index) => {
+                  return(
+                    <li key={movie.$id}>
+                      <p className="number">{index + 1}</p>
+                      <img src={movie.poster_url} alt={movie.title} />
+                    </li>
+                  );
+                })}
+              </ul>
           </section>
         )}
 
