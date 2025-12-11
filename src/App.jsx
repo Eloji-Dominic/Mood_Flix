@@ -6,7 +6,7 @@ import Spinner from "./components/Spinner";
 import ErrorMessage from "./components/ErrorMessage";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from 'react-use';
-import { updateSearchCount } from "./appwrite.js";
+import { getTrendingMovies, updateSearchCount } from "./appwrite.js";
 
 
 const App = () => {
@@ -67,23 +67,23 @@ const App = () => {
     }
   };
 
-  // const loadTrendingMovies = async () => {
-  //   try{
-  //     const movies = await getTrendingMovies();
+  const loadTrendingMovies = async () => {
+    try{
+      const movies = await getTrendingMovies();
 
-  //     setTrendingMovies(movies);
-  //   } catch(error){
-  //     console.error(`Error fetching trending movies: ${error}`);
-  //   }
-  // }
+      setTrendingMovies(movies);
+    } catch(error){
+      console.error(`Error fetching trending movies: ${error}`);
+    }
+  }
 
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
   }, [debouncedSearchTerm]);
 
-  // useEffect(() => {
-  //   loadTrendingMovies();
-  // }, [])
+  useEffect(() => {
+    loadTrendingMovies();
+  }, [])
 
   return (
     <main>
@@ -98,7 +98,7 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        {/* {trendingMovies.length > 0 && (
+        {trendingMovies.length > 0 && (
           <section>
             <h2>Trending Movies</h2>
 
@@ -111,7 +111,7 @@ const App = () => {
               })}
             </ul>
           </section>
-        )} */}
+        )}
 
         <section className="all-movies">
           {/* Movie listings will go here */}
