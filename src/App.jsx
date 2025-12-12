@@ -16,6 +16,23 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? trendingMovies.length - 1 : prevIndex - 1));
+  }
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === trendingMovies.length - 1 ? 0 : prevIndex + 1));
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [trendingMovies.length]);
 
   useDebounce(() => setDebouncedSearchTerm(searchTerm)
    , 700,
@@ -87,10 +104,50 @@ const App = () => {
 
   return (
     <main>
-      <div className="pattern" />
+      {/* <div className="pattern" /> */}
+      <div>
+        <h2 className="mt-[20px] sm:mx-auto mb-[20px]">Trending Movies</h2>
+
+        {trendingMovies.length > 0 && (
+          <div className="slider-container movie-card">
+            <div className="photos-container">
+              {trendingMovies.map((movie, index) => {
+                return (
+                  <div
+                    className={`photo-item ${
+                      index === currentIndex ? "active" : ""
+                    }`}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      opacity: index === currentIndex ? 1 : 0,
+                      transition: "opacity 1s ease-in-out",
+                    }}
+                    key={movie.$id}
+                  >
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.title}
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            {/* <button className="prev-btn" onClick={handlePrev}>
+              &lt;
+            </button>
+            <button className="next-btn" onClick={handleNext}>
+              &gt;
+            </button> */}
+          </div>
+        )}
+      </div>
+
       <div className="wrapper">
         <header>
-          <img src={HeroImg} alt="Hero banner" />
+          {/* <img src={HeroImg} alt="Hero banner" /> */}
           <h1>
             Find <span className="text-gradient">Movies</span> You'll Enjoy
             Without the Hassle
@@ -98,26 +155,9 @@ const App = () => {
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        {trendingMovies.length > 0 && (
-          <section>
-            <h2>Trending Movies</h2>
-
-              <ul className="trending-movies">
-                {trendingMovies.map((movie, index) => {
-                  return(
-                    <li key={movie.$id}>
-                      <p className="number">{index + 1}</p>
-                      <img src={movie.poster_url} alt={movie.title} />
-                    </li>
-                  );
-                })}
-              </ul>
-          </section>
-        )}
-
         <section className="all-movies">
           {/* Movie listings will go here */}
-          <h2 className="mt-[20px]" >All Movies</h2>
+          <h2 className="mt-[40px] mb-[40px]">All Movies</h2>
 
           {isLoading ? (
             <Spinner />
